@@ -2,20 +2,39 @@
 
 import { useState, useEffect } from 'react';
 import { Save, Plus, Trash2 } from 'lucide-react';
-import { useAffiliateStore } from '@/lib/affiliate-store';
+import type { AffiliateSettings } from '@/lib/config-store';
+
+const DEFAULT_SETTINGS: AffiliateSettings = {
+  affiliateId: '',
+  subIds: [''],
+  articleLink: '',
+  pageLink: '',
+};
 
 export default function SettingsPage() {
-  const { settings, setSettings, _hasHydrated } = useAffiliateStore();
-  const [formData, setFormData] = useState(settings);
+  const [formData, setFormData] = useState<AffiliateSettings>(DEFAULT_SETTINGS);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // Sync formData with store after hydration
+  // Fetch from server on mount
   useEffect(() => {
-    if (_hasHydrated) {
-      setFormData(settings);
-    }
-  }, [_hasHydrated]); // eslint-disable-line react-hooks/exhaustive-deps
+    let cancelled = false;
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && data.success && data.settings) {
+          setFormData(data.settings);
+        }
+      })
+      .catch((err) => console.error('Failed to fetch settings', err))
+      .finally(() => {
+        if (!cancelled) setIsLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,28 +55,38 @@ export default function SettingsPage() {
     setFormData({ ...formData, subIds: updated.length ? updated : [''] });
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setMessage({ type: '', text: '' });
 
+    const cleaned: AffiliateSettings = {
+      ...formData,
+      subIds: formData.subIds.filter((id) => id.trim() !== '') || [''],
+    };
+
     try {
-      // Filter out blank sub IDs before saving
-      const cleaned = {
-        ...formData,
-        subIds: formData.subIds.filter((id) => id.trim() !== '') || [''],
-      };
-      setSettings(cleaned);
-      setFormData(cleaned);
-      setMessage({ type: 'success', text: 'Lưu cấu hình thành công!' });
-    } catch {
-      setMessage({ type: 'error', text: 'Lỗi khi lưu cấu hình' });
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cleaned),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setFormData(cleaned);
+        setMessage({ type: 'success', text: 'Lưu cấu hình thành công!' });
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Lỗi khi lưu cấu hình' });
+      }
+    } catch (err: any) {
+      setMessage({ type: 'error', text: `Lỗi kết nối: ${err.message}` });
     } finally {
       setSaving(false);
     }
   };
 
-  if (!_hasHydrated) {
+  if (!isLoaded) {
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 flex items-center justify-center">
         <div className="text-gray-400 text-sm">Đang tải cấu hình...</div>

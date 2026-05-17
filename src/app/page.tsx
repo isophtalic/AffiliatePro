@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { Link as LinkIcon, Copy, ExternalLink, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useAffiliateStore } from '@/lib/affiliate-store';
 
 export default function Home() {
-  const { settings } = useAffiliateStore();
   const [url, setUrl] = useState('');
   const [generatedLink, setGeneratedLink] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +22,7 @@ export default function Home() {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, settings }),
+        body: JSON.stringify({ url }), // settings are loaded on the server now
       });
 
       const data = await res.json();

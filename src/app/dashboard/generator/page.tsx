@@ -2,17 +2,15 @@
 
 import { useState } from 'react';
 import { Link as LinkIcon, Copy, ExternalLink, CheckCircle } from 'lucide-react';
-import { useAffiliateStore } from '@/lib/affiliate-store';
 
 export default function GeneratorPage() {
-  const { settings } = useAffiliateStore();
   const [url, setUrl] = useState('');
   const [generatedLink, setGeneratedLink] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const handleGenerate = async (e: React.SubmitEvent) => {
+  const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -23,7 +21,7 @@ export default function GeneratorPage() {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, settings }),
+        body: JSON.stringify({ url }), // settings are loaded on the server now
       });
 
       const data = await res.json();
@@ -54,16 +52,6 @@ export default function GeneratorPage() {
       </div>
 
       <div className="p-6">
-        {!settings.affiliateId && (
-          <div className="p-4 mb-6 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
-            ⚠️ Chưa cấu hình Affiliate ID. Vui lòng vào{' '}
-            <a href="/dashboard/settings" className="font-semibold underline">
-              Cấu hình
-            </a>{' '}
-            để thiết lập.
-          </div>
-        )}
-
         <form onSubmit={handleGenerate} className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Link Shopee gốc</label>

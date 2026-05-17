@@ -1,4 +1,4 @@
-import type { AffiliateSettings } from './affiliate-store';
+import type { AffiliateSettings } from './config-store';
 
 const baseURL = "https://s.shopee.vn/an_redir";
 
