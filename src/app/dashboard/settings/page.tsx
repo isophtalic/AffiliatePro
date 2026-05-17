@@ -55,7 +55,7 @@ export default function SettingsPage() {
     setFormData({ ...formData, subIds: updated.length ? updated : [''] });
   };
 
-  const handleSave = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setSaving(true);
     setMessage({ type: '', text: '' });
@@ -77,7 +77,8 @@ export default function SettingsPage() {
         setFormData(cleaned);
         setMessage({ type: 'success', text: 'Lưu cấu hình thành công!' });
       } else {
-        setMessage({ type: 'error', text: data.error || 'Lỗi khi lưu cấu hình' });
+        console.log(data.error);
+        setMessage({ type: 'error', text: 'Lỗi khi lưu cấu hình' });
       }
     } catch (err: any) {
       setMessage({ type: 'error', text: `Lỗi kết nối: ${err.message}` });
