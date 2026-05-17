@@ -43,7 +43,7 @@ export default function LoginPage() {
           <div className="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
             <Lock className="text-white w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Quản Trị Shopee Affiliate</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Quản Trị Shopee 20%-22%-25%</h1>
           <p className="text-gray-500 mt-2">Vui lòng đăng nhập để tiếp tục</p>
         </div>
 

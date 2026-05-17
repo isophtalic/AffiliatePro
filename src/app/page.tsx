@@ -59,7 +59,7 @@ export default function Home() {
           <div className="bg-white/20 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/30">
             <LinkIcon className="text-white w-10 h-10" />
           </div>
-          <h1 className="text-3xl font-bold mb-2">Tạo Link Shopee Affiliate</h1>
+          <h1 className="text-3xl font-bold mb-2">Tạo Link Shopee 20%-22%-25%</h1>
           <p className="text-orange-100">Dán link sản phẩm Shopee vào bên dưới để tạo link rút gọn</p>
         </div>
 
@@ -97,7 +97,7 @@ export default function Home() {
                 <div className="absolute -top-3 left-6 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold border border-orange-200">
                   Link đã sẵn sàng!
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
                   <input
                     type="text"
@@ -109,11 +109,10 @@ export default function Home() {
                   <div className="flex gap-2 w-full sm:w-auto">
                     <button
                       onClick={handleCopy}
-                      className={`flex-1 sm:flex-none p-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all ${
-                        copied 
-                          ? 'bg-green-500 text-white shadow-lg shadow-green-500/30' 
+                      className={`flex-1 sm:flex-none p-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all ${copied
+                          ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
                           : 'bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 hover:shadow-lg hover:shadow-orange-500/20'
-                      }`}
+                        }`}
                     >
                       {copied ? (
                         <>
@@ -143,9 +142,9 @@ export default function Home() {
           )}
         </div>
       </div>
-      
+
       <div className="mt-8 text-center text-gray-500 text-sm">
-        <p>&copy; {new Date().getFullYear()} Shopee Affiliate Tool. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Shopee 20%-22%-25% Tool. All rights reserved.</p>
       </div>
     </div>
   );
